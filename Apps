@@ -73,7 +73,7 @@ local tArgs = {...}
 				print(file .. " already exist")
 			else
 				print("\nDownloading...")
-				if download(file) then
+				if get(file) then
 					print("Download success")
 				else
 					print("Download failure")
