@@ -1,4 +1,4 @@
-local url = "https://github.com/sjtumc/cc"
+local url = "https://raw.githubusercontent.com/sjtumc/cc/master"
 local index = ""
 local folderList = {}
 local fileList = {}
