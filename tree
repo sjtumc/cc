@@ -1,0 +1,59 @@
+--[[
+
+    Copyright (C) 2015-2016 MCSJTU  
+    All rights reserved
+
+    filename :tree
+    description :lua_for_turtle to cut down and plant trees
+
+    created by liooil
+    http://mcsjtu.me
+
+]]
+local tArgs = { ... }
+if #tArgs ~= 2 then
+  print( "Usage: tree <a> <b>" )
+  print( "a is half of the width, b is the length")
+  return
+end
+function st(name_for_item) -- select the item name_for_item
+	for i=1,16 do
+		turtle.select(i)
+		local Data=turtle.getItemDetail()
+		if Data.name == name_for_item then return i end
+	end
+	return false
+end
+function fd() -- go forward, cut down the tree if there is one
+	if turtle.forward() == false then
+		repeat turtle.dig() until turtle.forward()
+		turtle.digDown()
+		i=0
+		while turtle.digUp() do turtle.up() i=i+1 end
+		for j=1,i do
+			repeat turtle.digDown() until turtle.down()
+		end
+		st("IC2:blockRubSapling")
+		turtle.placeDown()
+	end
+end
+function tr() -- turn right
+	turtle.turnRight()
+	fd()
+	turtle.turnRight()
+end
+function tl() -- turn left
+	turtle.turnLeft()
+	fd()
+	turtle.turnLeft()
+end
+a = tArgs[1] b = tArgs[2]
+for i=1,a do
+	for i=1,b do fd() end
+	tl()
+	for i=1,b do fd() end
+	tr()
+end
+turtle.turnRight()
+for i=1,2*a do fd() end
+turtle.turnLeft()
