@@ -39,7 +39,7 @@ end
 
 
 --download program from server
-local function download(name)
+local function get(name)
 	
 		local response = http.get(url .. '/'..name)
 		if not response then 
@@ -68,7 +68,7 @@ local tArgs = {...}
 		local command = tArgs[1]
 		local file = tArgs[2]
 		file = shell.resolve(file)
-		if(command == "download") then
+		if(command == "get") then
 			if(fs.exists(file)) then
 				print(file .. " already exist")
 			else
