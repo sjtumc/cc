@@ -88,7 +88,7 @@ local tArgs = {...}
 	end
 	if #tArgs == 1 then
 		local input=tArgs[1]
-	    if(input == "Apps") then
+	    if(input == "list") then
 		  print("Sorry,it's under Developing")
 	    elseif(input == "help") then
 		  print("")
