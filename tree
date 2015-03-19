@@ -96,7 +96,7 @@ function main()
 	turtle.turnLeft()
 	turtle.back()
 end
-while redstone.getInput("top") do
+while redstone.getInput("left") do
 	main()
 	print("Sleeping...")
 	sleep(10*60)

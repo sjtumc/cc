@@ -1,0 +1,134 @@
+--[[
+
+    Copyright (C) 2015-2016 MCSJTU  
+    All rights reserved
+
+    filename :aeseeds
+    description :lua_for_turtle to grow seeds of AE
+
+    created by liooil
+    http://mcsjtu.me
+
+]]
+function isnfi(nfi) -- check if the item is nfi and return count of it
+--[[nfi list:
+	PS: Pure Seeds,Nether,Fluix; SD: SeeDs; FX: FluiX
+	CC: Charged Certus; QZ: QuartZ; RS: RedStone; NL: NiL
+]]
+	local Data=turtle.getItemDetail()
+	if Data == nil then
+		if nfi == "NL" then return true end
+		return false
+	end
+	if Data.name == "appliedenergistics2:item.ItemMultiMaterial" then
+		if Data.damage == 10 or Data.damage == 11 or Data.damage == 12 then
+			if nfi == "PS" then return true,Data.count end
+		end
+		if Data.damage == 7 then
+			if nfi == "FX" then return true,Data.count end
+		end
+		if Data.damage == 1  then
+			if nfi == "CC" then return true,Data.count end
+		end
+	end
+	if Data.name == "minecraft:quartz" then
+		if nfi == "QZ" then return true,Data.count end
+	end
+	if Data.name == "minecraft:redstone" then
+		if nfi == "RS" then return true,Data.count end
+	end
+	if Data.name == "appliedenergistics2:item.ItemCrystalSeed" then
+		if nfi == "SD" then return true,Data.count end
+	end
+	return false
+end
+function st(nfi) -- select the item name_for_item
+	local slt=turtle.getSelectedSlot()
+	for i=1,16 do
+		if slt+i>16 then slt=slt-16 end
+		turtle.select(slt+i)
+		if isnfi(nfi) then return i end
+	end
+	return false
+end
+function cnt(nfi) -- count how many items name_for_item are in the inventory
+	local slt=turtle.getSelectedSlot()
+	local n=0
+	for i=1,16 do
+		if slt+i>16 then slt=slt-16 end
+		turtle.select(slt+i)
+		local Is,num=isnfi(nfi)
+		if Is then n=n+num end
+	end
+	return n
+end
+function dpdn(n,nfi) -- drop down n items name_for_item in the inventory
+	local num=n
+	while num > 0 do
+		if st(nfi) == false then return false end
+		if num < turtle.getItemCount() then 
+			local cache=turtle.getSelectedSlot()
+			local tempt=st("NL")
+			turtle.select(cache)
+			turtle.transferTo(tempt,turtle.getItemCount()-num)
+		end
+		num=num-turtle.getItemCount()
+		turtle.dropDown()
+	end
+	return true
+end
+function dpn(n,nfi) -- drop n items name_for_item in the inventory
+	local num=n
+	while num > 0 do
+		if st(nfi) == false then return false end
+		if num < turtle.getItemCount() then 
+			local cache=turtle.getSelectedSlot()
+			local tempt=st("NL")
+			turtle.select(cache)
+			turtle.transferTo(tempt,turtle.getItemCount()-num)
+		end
+		num=num-turtle.getItemCount()
+		turtle.drop()
+	end
+	return true
+end
+function wt(n) -- wait for n seconds
+	local foo_1,foo_2 = 0,0
+	repeat
+		sleep(0.05)
+		foo_2 = foo_2+0.05
+		if foo_1 < math.modf(foo_2/n*100) then
+			foo_1=math.modf(foo_2/n*100)
+			print("Processing...." .. foo_1 .. "%")
+		end
+	until foo_2 >= n
+end
+function seed(n)
+	dpdn(n,"SD")
+	redstone.setOutput("front",true)
+	wt(125)
+	redstone.setOutput("front",false)
+	repeat until turtle.suckDown()==false
+	turtle.turnRight()
+	dpn(n,"PS")
+	turtle.turnLeft()
+end
+function flux(n)
+	dpdn(n,"CC") dpdn(n,"QZ") dpdn(n,"RS")
+	wt(5)
+	repeat until turtle.suckDown()==false
+	turtle.turnRight()
+	dpn(2*n,"FX")
+	turtle.turnLeft()
+end
+function dtkt()
+	local nseed,nflux=0,0
+	nseed=cnt("SD") nflux=cnt("CC")
+	if nseed~=0 then print("\n" .. nseed .. " seeds detected!") seed(nseed) end
+	if nflux~=0 then print("\n" .. nflux .. " fluix detected!") flux(nflux) end
+end
+while redstone.getInput("back") do
+	io.write("\nSearching")
+	dtkt()
+	for i=1,3 do sleep(1) io.write(".") end
+end
