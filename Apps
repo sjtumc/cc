@@ -65,13 +65,13 @@ local function help()
 	print("    download <fileName>: download code to local")
 end
 
-local args = {...}
-    if  #args == 0 then
+local tArgs = {...}
+    if  #tArgs == 0 then
 		help()
 	end
-	if 	#args == 2 then
-		local command = arg[1]
-		local file = arg[2]
+	if 	#tArgs == 2 then
+		local command = tArgs[1]
+		local file = tArgs[2]
 		file = shell.resolve(file)
 		if(command == "download") then
 			if(fs.exists(file)) then
@@ -86,8 +86,8 @@ local args = {...}
 			end
 		end
 	end
-	if #args == 1 then
-		local input=arg[1]
+	if #tArgs == 1 then
+		local input=tArgs[1]
 	    if(input == "Apps") then
 		  print("Sorry,it's under Developing")
 	    elseif(input == "help") then
