@@ -40,6 +40,7 @@ end
 
 --download program from server
 local function download(name)
+	
 		local response = http.get(url .. '/'..name)
 		if not response then 
 			print("Can't find " .. name .. " on server")
@@ -50,10 +51,8 @@ local function download(name)
 		f.close()
 		response.close()
 		return true
-	else 
-		print("Can't find " .. name .. " on server")
-		return false
-	end
+
+end
 
 local function help()
 	print("Usages:")
