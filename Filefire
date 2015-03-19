@@ -5,7 +5,7 @@ local fileList = {}
 
 --check whether or not enable the http api
 if not http then
-	printError("xia requires http API")
+	printError("This function  requires http API")
 	printError("Set http_enable to true in ComputerCraft.cfg")
 	return
 end
@@ -141,7 +141,7 @@ while true do
 		help()
 	elseif(input == "exit") then
 		print("Thanks for using my program")
-		print("--by xia")
+		print("--by xia-st")
 		return
 	else
 		print(input .." is not a command")
