@@ -57,7 +57,7 @@ end
 local function help()
 	print("Usages:")
 	print("    list: show the Apps on the server")
-	print("    download <fileName>: download code to local")
+	print("    get <fileName>: download code to local")
 end
 
 local tArgs = {...}
