@@ -40,10 +40,7 @@ end
 
 --download program from server
 local function download(name)
-	--check the name
-	if fileList[name] then	 
-		--if the name is a file name, then download it immediately
-		local response = http.get(url .. name)
+		local response = http.get(url .. '/'..name)
 		if not response then 
 			print("Can't find " .. name .. " on server")
 			return false --if cannot find the file, return false
@@ -57,7 +54,6 @@ local function download(name)
 		print("Can't find " .. name .. " on server")
 		return false
 	end
-end
 
 local function help()
 	print("Usages:")
