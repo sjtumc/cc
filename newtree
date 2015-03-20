@@ -1,7 +1,7 @@
 -- slot distribution:
-saplings=1
-woods=2
-fuels=16
+local saplings=1
+local woods=2
+local fuels=16
 
 function addSapling() -- add saplings
 	local space = nil
