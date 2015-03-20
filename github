@@ -1,0 +1,8 @@
+print('Download serve programs from github')
+name = 'Apps'
+path = shell.resolve( name )
+local a = http.get('https://raw.githubusercontent.com/sjtumc/cc/master/'..name)
+f = fs.open(path, "w")
+f.write(a.readAll())
+f.close()
+print('program '..name.." has downloaded as "..path)
