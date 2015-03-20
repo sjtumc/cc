@@ -59,7 +59,7 @@ local function star()
 	 local x,y = term.getSize()
       for i=1,x do
       	if (i<3)or(i>x-2) then
-      		term.write(' ')
+      		term.write('*')
       	else
       		term.write('*')
         end
@@ -68,9 +68,15 @@ local function star()
 end
 
 local function list()
-   local tmp = get("../applist")
+	local x,y = term.getSize()
+    local tmp = get("../applist")
+    local blank = ' '
+    for i=1,x/2-6 do
+    	 blank = blank..' '
+    end
+    local title = "apps in serve"
    if tmp then
-      print("   apps in serve   ")
+   	  print(blank..title)
       star()
    	  print(tmp)
    	  star()
