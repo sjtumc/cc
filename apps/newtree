@@ -15,14 +15,11 @@ function addSapling() -- add saplings
 end
 function addFuel() -- add fuel
 	if turtle.getFuelLimit()-turtle.getFuelLevel() > 80*64 then -- if it can refuel a hole slot of coal
-		local space = nil
 		turtle.select(fuels)
 		turtle.turnLeft()
-		space = turtle.getItemSpace()
-		turtle.suck(space)
+		turtle.place()
+		turtle.refuel()
 		turtle.turnRight()
-		space = turtle.getItemCount()
-		turtle.refuel(space)
 	end
 end
 function dropExtraWood() -- drop extra wood
