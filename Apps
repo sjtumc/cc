@@ -12,7 +12,7 @@ end
 
 local tArgs = {...}
 if #tArgs == 0 then
-    printUsage()Ap
+    printUsage()
     return
 end
  
@@ -40,13 +40,13 @@ end
 
 local function isExists(file)
     if fs.exists( file ) then
-        print( "   Warning! this file has already exists,do you want to replace it? y or n" )
+        print( "  Warning! this file has already exists,do you want to replace it? y or n" )
         local replace = read()
         if (replace == "y") or (replace == "Y") then
-        	print("  "..tostring(file).."will be repalced")
+        	print("  "..tostring(file).." will be repalced")
         	return true
         else 
-        	print("  "..tostring(file).."won't be repalced")
+        	print("  "..tostring(file).." won't be repalced")
       	return false
         end
     else 
@@ -107,6 +107,6 @@ elseif sCommand == "run" then
 elseif sCommand == "more" then
 	 more()
 else
-    printUsage()
+    printUsage()edit 
     return
 end
