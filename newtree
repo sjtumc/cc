@@ -43,7 +43,7 @@ function ford() -- go forward, cut down the tree if there is one
 			turtle.up()
 			height = height +1
 		end
-		for h=height-1,2,-1 -- back down to height of 2
+		for h=height-1,2,-1 do-- back down to height of 2
 			if turtle.detectDown() do
 				turtle.digDown()
 			end
