@@ -107,6 +107,6 @@ elseif sCommand == "run" then
 elseif sCommand == "more" then
 	 more()
 else
-    printUsage()edit 
+    printUsage()
     return
 end
