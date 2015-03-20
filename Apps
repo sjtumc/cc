@@ -65,7 +65,7 @@ if sCommand == "get" then
     local sFile    = tArgs[2]
     local sRename  = tArgs[3]
     local filename = sRename
-    if not filename then do
+    if not filename then 
     	print("use filename frome server")
     	if not isExists(sRename) then 
     		filename = sFile
@@ -75,7 +75,8 @@ if sCommand == "get" then
     	print("use different filename")
     	return
     end
-       sPath  = shell.resolve( filename )
+    
+    sPath  = shell.resolve( filename )
     if not isExists( sPath ) then
         return
     end
