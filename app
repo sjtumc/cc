@@ -23,20 +23,9 @@ if not http then
     return
 end
 
-local funtion list()
-   local tmp = get("applist")
-   if tmp then
-      local list = fs.open("applist","w")
-      print(list.readAll())
-      list.close()
-      delete applist
-    else 
-      print("can't open applist")
-end
-
 local function get(paste)
     write( "  Connecting to github.com... " )
-    local urlPrefix = "https://raw.githubusercontent.com/sjtumc/cc/master/apps"
+    local urlPrefix = "https://raw.githubusercontent.com/sjtumc/cc/master/apps/"
     local response = http.get(urlPrefix..textutils.urlEncode( paste ))
         
     if response then
@@ -63,6 +52,15 @@ local function isExists(file)
         end
     else 
     	return true
+    end
+end
+
+local function list()
+   local tmp = get("../applist")
+   if tmp then
+   	  print(tmp)
+    else 
+      print("can't open applist")
     end
 end
 
