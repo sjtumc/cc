@@ -51,14 +51,14 @@ function ford() -- go forward, cut down the tree if there is one
 		end
 		if turtle.compareDown() then -- cut the root
 			turtle.digDown()
+		turtle.select(saplings) -- check if saplings are already planted, if not, plant one
+		if not turtle.compareDown() then
+			turtle.digDown()
+			turtle.placeDown() -- put down new sapling
+		end
 		end
 	else
 		turtle.forward() -- if no tree in the front, go ahead
-	end
-	turtle.select(saplings) -- check if saplings are already planted, if not, plant one
-	if not turtle.compareDown() then
-		turtle.digDown()
-		turtle.placeDown() -- put down new sapling
 	end
 end
 while turtle.getItemCount(saplings) > 16 do -- while more saplings in inventory
