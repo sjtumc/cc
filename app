@@ -29,7 +29,7 @@ local function get(paste)
     local response = http.get(urlPrefix..textutils.urlEncode( paste ))
         
     if response then
-        print( "  Success." )
+        print( " Success." )
         
         local sResponse = response.readAll()
         response.close()
@@ -55,10 +55,25 @@ local function isExists(file)
     end
 end
 
+local function star()
+	 local x,y = term.getSize()
+      for i=1,x do
+      	if (i<3)or(i>x-2) then
+      		term.write(' ')
+      	else
+      		term.write('*')
+        end
+      end
+      print(' ')
+end
+
 local function list()
    local tmp = get("../applist")
    if tmp then
+      print("   apps in serve   ")
+      star()
    	  print(tmp)
+   	  star()
     else 
       print("can't open applist")
     end
