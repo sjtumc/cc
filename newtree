@@ -37,11 +37,16 @@ function ford() -- go forward, cut down the tree if there is one
 	if turtle.compare() then -- if their is a tree in the front, cut it
 		turtle.dig()
 		turtle.forward()
+		local height=2 -- the height of the tree
 		while turtle.compareUp() do -- dig tree out
 			turtle.digUp()
 			turtle.up()
+			height = height +1
 		end
-		while not turtle.detectDown() do -- back down to ground
+		for h=height-1,2,-1 -- back down to height of 2
+			if turtle.detectDown() do
+				turtle.digDown()
+			end
 			turtle.down()
 		end
 		if turtle.compareDown() then -- cut the root and plant a new sapling
