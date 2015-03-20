@@ -77,7 +77,7 @@ while turtle.getItemCount(saplings) > 16 do -- while more saplings in inventory
 	end
 
 	--return to the original point
-	turlte.turnLeft()
+	turtle.turnLeft()
 	for i = 2, 16 do -- go forward for 15 times
 		ford()
 	end
