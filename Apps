@@ -1,53 +1,52 @@
 
 local function printUsage()
     print( "Usages:" )
-    print( "Apps get <filename>  optional :<rename>" )
-    print( "Apps run <filename> <arguments>" )
-    print( "more info use Apps more ")
+    print( "  Apps get <filename>  optional :<rename>" )
+    print( "  Apps run <filename> <arguments>" )
+    print( "  more info use Apps more ")
 end
 
 local function more()
-    print("run <filename> <args> will download the file (if file exists ,replace it by default) and execute programs with args")
+    print("  run <filename> <args> will download the file (if file exists ,replace it by default) and execute programs with args")
 end
 
-local tArgs = {  }
+local tArgs = {...}
 if #tArgs == 0 then
-    printUsage()
+    printUsage()Ap
     return
 end
  
 if not http then
-    printError( "Apps requires http API" )
-    printError( "Set http_enable to true in ComputerCraft.cfg" )
+    printError( "  Apps requires http API" )
+    printError( "  Set http_enable to true in ComputerCraft.cfg" )
     return
 end
  
 local function get(paste)
-    write( "Connecting to github.com... " )
+    write( "  Connecting to github.com... " )
     local urlPrefix = "https://raw.githubusercontent.com/sjtumc/cc/master/"
     local response = http.get(urlPrefix..textutils.urlEncode( paste ))
         
     if response then
-        print( "Success." )
+        print( "  Success." )
         
         local sResponse = response.readAll()
         response.close()
         return sResponse
     else
-        printError( "Failed." )
+        printError( "  Failed." )
     end
 end
 
 local function isExists(file)
-    local sPath = shell.resolve( file )
-    if fs.exists( sPath ) then
-        print( "File already exists,do you want to replace it? y or n" )
+    if fs.exists( file ) then
+        print( "   Warning! this file has already exists,do you want to replace it? y or n" )
         local replace = read()
         if (replace == "y") or (replace == "Y") then
-        	pirnt(tostring(file).."will be repalced")
+        	print("  "..tostring(file).."will be repalced")
         	return true
         else 
-        	pirnt(tostring(file).."won't be repalced")
+        	print("  "..tostring(file).."won't be repalced")
       	return false
         end
     else 
@@ -59,7 +58,7 @@ local sCommand = tArgs[1]
 
 if sCommand == "get" then
     -- Download a file from pastebin.com
-    if #tArgs < 3 then
+    if #tArgs < 2 then
         printUsage()
         return
     end
@@ -69,12 +68,10 @@ if sCommand == "get" then
     local sRename  = tArgs[3]
     local filename = sRename
     if not filename then 
-    	print("use filename frome server")
-    	if  isExists(sRename) then 
-    		 filename = sFile
-        end
+    	print("  try to use default name")
+    	   filename = sFile
     elseif filename == sFile then 
-    	print("use different filename")
+    	print("  use different filename for replace")
     	return
     end
 
@@ -89,7 +86,7 @@ if sCommand == "get" then
         local file = fs.open( sPath, "w" )
         file.write( res )
         file.close()
-        print( "Downloaded  "..sFile.." and save as "..sPath)
+        print( "  Downloaded  "..sFile.." and save as "..sPath)
     end 
 elseif sCommand == "run" then
     local sFile = tArgs[2]
@@ -108,7 +105,7 @@ elseif sCommand == "run" then
         end
     end
 elseif sCommand == "more" then
-	printmore()
+	 more()
 else
     printUsage()
     return
