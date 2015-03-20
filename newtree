@@ -1,0 +1,94 @@
+-- slot distribution:
+saplings=1
+woods=2
+fuels=16
+
+function addSapling() -- add saplings
+	local space = nil
+	turtle.select(saplings)
+	turtle.turnLeft()
+	turtle.turnLeft()
+	space = turtle.getItemSpace()
+	turtle.suck(space)
+	turtle.turnLeft()
+	turtle.turnLeft()
+end
+function addFuel() -- add fuel
+	if turtle.getFuelLimit()-turtle.getFuelLevel() > 80*64 then -- if it can refuel a hole slot of coal
+		local space = nil
+		turtle.select(fuels)
+		turtle.turnLeft()
+		space = turtle.getItemSpace()
+		turtle.suck(space)
+		turtle.turnRight()
+		space = getItemCount()
+		turtle.refuel(space)
+	end
+end
+function dropExtraWood() -- drop extra wood
+	for i=3,15 do
+		turtle.select(i)
+		turtle.dropDown()
+	end
+end
+
+function ford() -- go forward, cut down the tree if there is one
+	turtle.select(woods)
+	if turtle.compare() then -- if their is a tree in the front, cut it
+		turtle.dig()
+		turtle.forward()
+		while turtle.compareUp() do -- dig tree out
+			turtle.digUp()
+			turtle.up()
+		end
+		while not turtle.detectDown() do -- back down to ground
+			turtle.down()
+		end
+		if turtle.compareDown() then -- cut the root and plant a new sapling
+			turtle.digDown()
+			turtle.select(saplings) -- select the saplings
+			turtle.placeDown() -- put down new sapling
+		end
+	else
+		turtle.forward() -- if no tree in the front, go ahead
+	end
+end
+while turtle.getItemCount(saplings) > 16 do -- while more saplings in inventory
+	print("Working!")
+
+	ford() -- leave from the station
+
+	for j = 1,8 do 
+		for i = 2, 16 do -- go forward for 15 times
+			ford()
+		end
+		-- turn to the left line
+		turtle.turnLeft()
+		ford()
+		turtle.turnLeft()
+		for i = 2, 16 do -- go forward for 15 times
+			ford()
+		end
+		-- turn to the right line, which is limited when j~=8
+		if j == 8 then break end
+		turtle.turnRight()
+		ford()
+		turtle.turnRight()
+	end
+
+	--return to the original point
+	turlte.turnLeft()
+	for i = 2, 16 do -- go forward for 15 times
+		ford()
+	end
+	turtle.turnLeft()
+	turtle.back() -- back into the station
+
+	addSapling() -- add sapling
+	addFuel() -- add fuel
+	dropExtraWood() -- drop woods
+
+	print("Sleeping...")
+	os.sleep(30) -- sleep for 30 seconds to allow trees to grow
+end
+print("Sapling needed!")
