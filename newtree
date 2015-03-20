@@ -21,7 +21,7 @@ function addFuel() -- add fuel
 		space = turtle.getItemSpace()
 		turtle.suck(space)
 		turtle.turnRight()
-		space = getItemCount()
+		space = turtle.getItemCount()
 		turtle.refuel(space)
 	end
 end
@@ -44,18 +44,21 @@ function ford() -- go forward, cut down the tree if there is one
 			height = height +1
 		end
 		for h=height-1,2,-1 do-- back down to height of 2
-			if turtle.detectDown() do
+			if turtle.detectDown() then
 				turtle.digDown()
 			end
 			turtle.down()
 		end
-		if turtle.compareDown() then -- cut the root and plant a new sapling
+		if turtle.compareDown() then -- cut the root
 			turtle.digDown()
-			turtle.select(saplings) -- select the saplings
-			turtle.placeDown() -- put down new sapling
 		end
 	else
 		turtle.forward() -- if no tree in the front, go ahead
+	end
+	turtle.select(saplings) -- check if saplings are already planted, if not, plant one
+	if not turtle.compareDown() then
+		turtle.digDown()
+		turtle.placeDown() -- put down new sapling
 	end
 end
 while turtle.getItemCount(saplings) > 16 do -- while more saplings in inventory
