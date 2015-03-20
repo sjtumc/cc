@@ -49,6 +49,9 @@ local function isExists(file)
         else 
         	pirnt(tostring(file).."won't be repalced")
       	return false
+        end
+    else 
+    	return true
     end
 end
 
@@ -67,15 +70,14 @@ if sCommand == "get" then
     local filename = sRename
     if not filename then 
     	print("use filename frome server")
-    	if not isExists(sRename) then 
-    		filename = sFile
-        	return
+    	if  isExists(sRename) then 
+    		 filename = sFile
         end
     elseif filename == sFile then 
     	print("use different filename")
     	return
     end
-    
+
     sPath  = shell.resolve( filename )
     if not isExists( sPath ) then
         return
