@@ -1,95 +1,115 @@
-local url = "https://raw.githubusercontent.com/sjtumc/cc/master"
-local index = ""
-local folderList = {}
-local fileList = {}
 
---check whether or not enable the http api
+local function printUsage()
+    print( "Usages:" )
+    print( "Apps get <filename>  optional :<rename>" )
+    print( "Apps run <filename> <arguments>" )
+    print( "more info use Apps more ")
+end
+
+local function more()
+    print("run <filename> <args> will download the file (if file exists ,replace it by default) and execute programs with args")
+end
+
+local tArgs = {  }
+if #tArgs == 0 then
+    printUsage()
+    return
+end
+ 
 if not http then
-	printError("This function  requires http API")
-	printError("Set http_enable to true in ComputerCraft.cfg")
-	return
+    printError( "Apps requires http API" )
+    printError( "Set http_enable to true in ComputerCraft.cfg" )
+    return
+end
+ 
+local function get(paste)
+    write( "Connecting to github.com... " )
+    local urlPrefix = "https://raw.githubusercontent.com/sjtumc/cc/master/"
+    local response = http.get(urlPrefix..textutils.urlEncode( paste ))
+        
+    if response then
+        print( "Success." )
+        
+        local sResponse = response.readAll()
+        response.close()
+        return sResponse
+    else
+        printError( "Failed." )
+    end
 end
 
-
---init program download some message from Insernet
-local function init()
-	--load index
-	local text -- used to save list message
-	local response = http.get(url .. "index")
-	if not response then return false end
-	index = response.readAll()
-	print("Get index success")
-	response.close()
-	
-	
-	--load folder list
-	response = http.get(url .. "folderList")
-	if not response then return false end
-	text = response.readLine()
-	while text ~= EOF do
-		folderList[text] = true
-		text = response.readLine()
-	end
-	print("Get folder list success")
-	response.close()
-	print("Init success")
-	print("Try input \"help\"")
-	return true
+local function isExists(file)
+    local sPath = shell.resolve( file )
+    if fs.exists( sPath ) then
+        print( "File already exists,do you want to replace it? y or n" )
+        local replace = read()
+        if (replace == "y") or (replace == "Y") then
+        	pirnt(tostring(file).."will be repalced")
+        	return true
+        else 
+        	pirnt(tostring(file).."won't be repalced")
+      	return false
+        end
+    else 
+    	return true
+    end
 end
 
+local sCommand = tArgs[1]
 
---download program from server
-local function get(name)
-	
-		local response = http.get(url .. '/'..name)
-		if not response then 
-			print("Can't find " .. name .. " on server")
-			return false --if cannot find the file, return false
-		end	
-		local f = fs.open(name, "w")	--write the code in local file
-		f.write(response.readAll())
-		f.close()
-		response.close()
-		return true
+if sCommand == "get" then
+    -- Download a file from pastebin.com
+    if #tArgs < 3 then
+        printUsage()
+        return
+    end
+ 
+    -- Determine file to download
+    local sFile    = tArgs[2]
+    local sRename  = tArgs[3]
+    local filename = sRename
+    if not filename then 
+    	print("use filename frome server")
+    	if  isExists(sRename) then 
+    		 filename = sFile
+        end
+    elseif filename == sFile then 
+    	print("use different filename")
+    	return
+    end
 
+    sPath  = shell.resolve( filename )
+    if not isExists( sPath ) then
+        return
+    end
+    
+    -- GET the contents from pastebin
+    local res = get(sFile)
+    if res then        
+        local file = fs.open( sPath, "w" )
+        file.write( res )
+        file.close()
+        print( "Downloaded  "..sFile.." and save as "..sPath)
+    end 
+elseif sCommand == "run" then
+    local sFile = tArgs[2]
+ 
+    local res = get(sFile)
+    if res then
+        local func, err = loadstring(res)
+        if not func then
+            printError( err )
+            return
+        end
+        setfenv(func, getfenv())
+        local success, msg = pcall(func, unpack(tArgs, 3))
+        if not success then
+            printError( msg )
+        end
+    end
+elseif sCommand == "more" then
+	printmore()
+else
+    printUsage()
+    return
 end
-
-local function help()
-	print("Usages:")
-	print("    list: show the Apps on the server")
-	print("    get <fileName>: download code to local")
-end
-
-local tArgs = {...}
-    if  #tArgs == 0 then
-		help()
-	end
-	if 	#tArgs == 2 then
-		local command = tArgs[1]
-		local file = tArgs[2]
-		file = shell.resolve(file)
-		if(command == "get") then
-			if(fs.exists(file)) then
-				print(file .. " already exist")
-			else
-				print("\nDownloading...")
-				if get(file) then
-					print("Download success")
-				else
-					print("Download failure")
-				end
-			end
-		end
-	end
-	if #tArgs == 1 then
-		local input=tArgs[1]
-	    if(input == "list") then
-		  print("Sorry,it's under Developing")
-	    elseif(input == "help") then
-		  print("")
-		  help()
-	    else
-		  print(input .." is not a command")
-		  print("try reference to \"help\"")
-	    end
-	end
