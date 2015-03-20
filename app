@@ -1,9 +1,10 @@
 
 local function printUsage()
     print( "Usages:" )
-    print( "  Apps get <filename>  optional :<rename>" )
-    print( "  Apps run <filename> <arguments>" )
-    print( "  more info use Apps more ")
+    print( "  app get <filename>  optional :<rename>" )
+    print( "  app run <filename> <arguments>" )
+    print( "  app list  :list all apps")
+    print( "  app more :more info  ")
 end
 
 local function more()
@@ -21,10 +22,21 @@ if not http then
     printError( "  Set http_enable to true in ComputerCraft.cfg" )
     return
 end
- 
+
+local funtion list()
+   local tmp = get("applist")
+   if tmp then
+      local list = fs.open("applist","w")
+      print(list.readAll())
+      list.close()
+      delete applist
+    else 
+      print("can't open applist")
+end
+
 local function get(paste)
     write( "  Connecting to github.com... " )
-    local urlPrefix = "https://raw.githubusercontent.com/sjtumc/cc/master/"
+    local urlPrefix = "https://raw.githubusercontent.com/sjtumc/cc/master/apps"
     local response = http.get(urlPrefix..textutils.urlEncode( paste ))
         
     if response then
@@ -104,6 +116,8 @@ elseif sCommand == "run" then
             printError( msg )
         end
     end
+elseif sCommand == "list" then
+	 list()
 elseif sCommand == "more" then
 	 more()
 else

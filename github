@@ -1,5 +1,5 @@
 print('Download serve programs from github')
-name = 'Apps'
+name = 'app'
 path = shell.resolve( name )
 local a = http.get('https://raw.githubusercontent.com/sjtumc/cc/master/'..name)
 f = fs.open(path, "w")
