@@ -7,10 +7,11 @@ local function printUsage()
 end
 
 local function more()
-    print("run <filename> <args> will download the file (if file exists ,replace
-           it by default) and execute programs with args")
-local tArgs = { ... }
-if #tArgs < 1 then
+    print("run <filename> <args> will download the file (if file exists ,replace it by default) and execute programs with args")
+end
+
+local tArgs = {  }
+if #tArgs == 0 then
     printUsage()
     return
 end
@@ -49,6 +50,7 @@ local function isExists(file)
         	pirnt(tostring(file).."won't be repalced")
       	return false
     end
+end
 
 local sCommand = tArgs[1]
 
@@ -102,7 +104,7 @@ elseif sCommand == "run" then
             printError( msg )
         end
     end
-elseif sCommand == "more"then
+elseif sCommand == "more" then
 	printmore()
 else
     printUsage()
