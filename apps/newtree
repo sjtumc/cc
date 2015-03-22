@@ -3,30 +3,31 @@ local saplings=1
 local woods=2
 local fuels=16
 
-function addSapling() -- add saplings
-	local space = nil
+function additems() -- add wood and saplings
 	turtle.select(saplings)
-	turtle.turnLeft()
-	turtle.turnLeft()
-	space = turtle.getItemSpace()
-	turtle.suck(space)
-	turtle.turnLeft()
-	turtle.turnLeft()
+	turtle.suckUp()
+	turtle.select(woods)
+	turtle.suckDown()
 end
 function addFuel() -- add fuel
-	if turtle.getFuelLimit()-turtle.getFuelLevel() > 80*64 then -- if it can refuel a hole slot of coal
+	if turtle.getFuelLimit()-turtle.getFuelLevel() > 1000 then -- if it can refuel a bucket of lava
 		turtle.select(fuels)
 		turtle.turnLeft()
-		turtle.place()
+		turtle.drop()
+		turtle.suck()
 		turtle.refuel()
 		turtle.turnRight()
 	end
 end
-function dropExtraWood() -- drop extra wood
+function dropitems() -- drop woods and saplings
+	-- drop all the woods
 	for i=3,15 do
 		turtle.select(i)
 		turtle.dropDown()
 	end
+	-- drop the saplings
+	turtle.select(saplings)
+	turtle.dropUp()
 end
 
 function ford() -- go forward, cut down the tree if there is one
@@ -39,6 +40,7 @@ function ford() -- go forward, cut down the tree if there is one
 			turtle.digUp()
 			turtle.up()
 			height = height +1
+			if height > 15 then break end
 		end
 		for h=height-1,2,-1 do-- back down to height of 2
 			if turtle.detectDown() then
@@ -55,6 +57,10 @@ function ford() -- go forward, cut down the tree if there is one
 		end
 		end
 	else
+		while turtle.detect() do -- if there is something other than the wood, destroy it
+			turtle.dig()
+			turtle.attack()
+		end
 		turtle.forward() -- if no tree in the front, go ahead
 	end
 end
@@ -89,9 +95,9 @@ while turtle.getItemCount(saplings) > 16 do -- while more saplings in inventory
 	turtle.turnLeft()
 	turtle.back() -- back into the station
 
-	addSapling() -- add sapling
+	dropitems() -- drop woods and saplings
 	addFuel() -- add fuel
-	dropExtraWood() -- drop woods
+	additems() -- add sapling and woods
 
 	print("Sleeping...")
 	os.sleep(30) -- sleep for 30 seconds to allow trees to grow
