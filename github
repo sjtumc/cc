@@ -1,4 +1,4 @@
-print('Download serve programs from github')
+print('Download server programs from github')
 name = 'app'
 path = shell.resolve( name )
 local a = http.get('https://raw.githubusercontent.com/sjtumc/cc/master/'..name)

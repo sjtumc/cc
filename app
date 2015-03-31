@@ -74,7 +74,7 @@ local function list()
     for i=1,x/2-6 do
     	 blank = blank..' '
     end
-    local title = "apps in serve"
+    local title = "apps in server"
    if tmp then
    	  print(blank..title)
       star()
